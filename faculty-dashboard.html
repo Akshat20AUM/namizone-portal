@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMIZONE - Faculty Portal</title>
+    <link rel="stylesheet" href="faculty.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- TOP FACULTY HEADER -->
+    <header class="top-header">
+        <div class="header-left">
+            <div class="logo-box">
+                <h1 class="namizone-logo">NAMI<span class="lightning">Z</span>ONE</h1>
+            </div>
+            <div class="uni-name">XYZ University — Faculty Gateway</div>
+        </div>
+
+        <div class="header-right">
+            <!-- GEAR ICON FOR DARK/NIGHT MODE TOGGLE -->
+            <div class="nav-icon-badge" id="themeToggleBtn" onclick="toggleDarkMode()" title="Toggle Dark/Night Mode">
+                <i class="fa-solid fa-gear" id="themeIcon"></i>
+            </div>
+
+            <div class="user-profile">
+                <i class="fa-solid fa-user-tie staff-avatar"></i>
+                <div class="user-info">
+                    <span class="user-name">PROF. JAVA FACULTY</span>
+                    <span class="user-sub">Dept. of Computer Science [ID: 314435]</span>
+                </div>
+                <i class="fa-solid fa-right-from-bracket logout-icon" onclick="logout()" title="Logout"></i>
+            </div>
+        </div>
+    </header>
+
+    <div class="faculty-app-layout">
+        
+        <!-- SIDEBAR NAVIGATION PANEL -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active"><i class="fa-solid fa-calendar-days"></i> My Schedule</li>
+                
+                <!-- ATTENDANCE PORTAL MENU OPTION -->
+                <li class="nav-item" onclick="openAttendanceModal('Java Programming (IFA2301N)')">
+                    <i class="fa-solid fa-user-check"></i> Attendance Portal
+                </li>
+
+                <li class="nav-item dropdown">
+                    <i class="fa-solid fa-book"></i> Academics & LMS <i class="fa-solid fa-chevron-down arrow"></i>
+                </li>
+                <li class="nav-item"><i class="fa-solid fa-laptop-code"></i> MS Teams Groups</li>
+                <li class="nav-item"><i class="fa-solid fa-file-pen"></i> Internal Assessments</li>
+                <li class="nav-item"><i class="fa-solid fa-flask"></i> Research Facilities</li>
+                <li class="nav-item"><i class="fa-solid fa-bullhorn"></i> Notice Board</li>
+                <li class="nav-item"><i class="fa-solid fa-wifi"></i> WiFi Registration</li>
+                <li class="nav-item"><i class="fa-solid fa-clock"></i> Time Office</li>
+            </ul>
+        </aside>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="faculty-main-content">
+            
+            <!-- SECTION 1: TODAY'S TIMETABLE WITH START / END CLASS CONTROLS -->
+            <section class="card timetable-card">
+                <div class="card-header">
+                    <div>
+                        <h2><i class="fa-solid fa-calendar-day"></i> Java Faculty Schedule & Live Class Control</h2>
+                        <span class="sub-heading">Monday, August 10, 2026 | Logged in: Java Specialist</span>
+                    </div>
+                    <span class="badge live">🟢 2 Active Java Sessions</span>
+                </div>
+
+                <div class="schedule-list">
+                    <!-- Java Slot 1: Theory -->
+                    <div class="schedule-item active-slot" id="slot-ifa2301n">
+                        <div class="slot-time">13:00 - 13:50</div>
+                        <div class="slot-details">
+                            <strong>Java Programming (IFA2301N)</strong>
+                            <span>BCA 3rd Sem (Section 321) | Room 414 | Lecture</span>
+                            <span class="class-status-text" id="status-ifa2301n">Status: Scheduled</span>
+                        </div>
+                        <div class="slot-actions">
+                            <button id="btn-start-ifa2301n" class="btn-class start" onclick="startClass('Java Programming (IFA2301N)', 'ifa2301n')">
+                                <i class="fa-solid fa-play"></i> Start Class
+                            </button>
+                            <button id="btn-end-ifa2301n" class="btn-class end disabled" disabled onclick="endClass('Java Programming (IFA2301N)', 'ifa2301n')">
+                                <i class="fa-solid fa-stop"></i> End Class
+                            </button>
+                            <button class="btn-class att-roster" onclick="openAttendanceModal('Java Programming (IFA2301N)')">
+                                <i class="fa-solid fa-list-check"></i> Student Roster (10)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Java Slot 2: Lab -->
+                    <div class="schedule-item active-slot" id="slot-ifa2302n">
+                        <div class="slot-time">16:00 - 16:50</div>
+                        <div class="slot-details">
+                            <strong>Java Programming Lab (IFA2302N)</strong>
+                            <span>BCA 3rd Sem (Section 322) | Lab 105 | Practical</span>
+                            <span class="class-status-text" id="status-ifa2302n">Status: Scheduled</span>
+                        </div>
+                        <div class="slot-actions">
+                            <button id="btn-start-ifa2302n" class="btn-class start" onclick="startClass('Java Programming Lab (IFA2302N)', 'ifa2302n')">
+                                <i class="fa-solid fa-play"></i> Start Class
+                            </button>
+                            <button id="btn-end-ifa2302n" class="btn-class end disabled" disabled onclick="endClass('Java Programming Lab (IFA2302N)', 'ifa2302n')">
+                                <i class="fa-solid fa-stop"></i> End Class
+                            </button>
+                            <button class="btn-class att-roster" onclick="openAttendanceModal('Java Programming Lab (IFA2302N)')">
+                                <i class="fa-solid fa-list-check"></i> Student Roster (10)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: PUBLISH ASSIGNMENT / POP QUIZ -->
+            <section class="card upload-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-cloud-arrow-up"></i> Publish Java Assignment / Pop Quiz</h2>
+                    <span class="badge broadcast"><i class="fa-solid fa-tower-broadcast"></i> Live Student Broadcast</span>
+                </div>
+
+                <form id="facultyUploadForm" onsubmit="publishFacultyItem(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="postType">Item Type:</label>
+                            <select id="postType" required>
+                                <option value="assignment">Assignment</option>
+                                <option value="quiz">Pop Quiz</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="postSubject">Select Course:</label>
+                            <select id="postSubject" required>
+                                <option value="Java Programming">Java Programming (IFA2301N)</option>
+                                <option value="Java Programming Lab">Java Programming Lab (IFA2302N)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group margin-top">
+                        <label for="postTitle">Title / Topic Description:</label>
+                        <input type="text" id="postTitle" placeholder="e.g., Unit 3 Mini-Project: Multithreaded Banking Application" required>
+                    </div>
+
+                    <button type="submit" class="publish-btn">
+                        <i class="fa-solid fa-paper-plane"></i> Publish & Broadcast to Students
+                    </button>
+                </form>
+            </section>
+
+            <!-- SECTION 3: DUMMY NOTIFICATION GENERATOR FOR SHOWCASE -->
+            <section class="card notification-generator-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-wand-magic-sparkles"></i> Showcase Dummy Notification Generator</h2>
+                    <span class="badge broadcast">⚡ Real-Time Student Toast Test</span>
+                </div>
+                <p class="section-desc">Click any preset button below or send a custom message to trigger a live notification toast on the open Student Dashboard tab:</p>
+
+                <div class="preset-btn-group">
+                    <button class="btn-preset assignment" onclick="triggerQuickDummy('assignment')">
+                        <i class="fa-solid fa-file-circle-plus"></i> Preset: New Java Assignment
+                    </button>
+                    <button class="btn-preset quiz" onclick="triggerQuickDummy('quiz')">
+                        <i class="fa-solid fa-pen-ruler"></i> Preset: ML Pop Quiz Alert
+                    </button>
+                    <button class="btn-preset class" onclick="triggerQuickDummy('class')">
+                        <i class="fa-solid fa-chalkboard-user"></i> Preset: Live Class Reminder
+                    </button>
+                </div>
+
+                <div class="custom-generator-form">
+                    <div class="form-row margin-top">
+                        <div class="form-group">
+                            <label for="dummyAuthor">Faculty Name:</label>
+                            <input type="text" id="dummyAuthor" value="Prof. Java Faculty">
+                        </div>
+                        <div class="form-group">
+                            <label for="dummySubject">Course Subject:</label>
+                            <input type="text" id="dummySubject" value="Java Programming (IFA2301N)">
+                        </div>
+                        <div class="form-group">
+                            <label for="dummyType">Toast Style:</label>
+                            <select id="dummyType">
+                                <option value="assignment">Assignment (Orange Accent)</option>
+                                <option value="quiz">Pop Quiz (Purple Accent)</option>
+                                <option value="class_start">Class Start (Green Accent)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group margin-top">
+                        <label for="dummyTitle">Notification Message:</label>
+                        <input type="text" id="dummyTitle" placeholder="e.g., Reminder: Unit 3 Multithreading Assignment due at 11:59 PM!">
+                    </div>
+
+                    <button class="publish-btn dummy-send-btn" onclick="sendCustomDummyNotification()">
+                        <i class="fa-solid fa-bolt"></i> Broadcast Showcase Notification
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION 4: TOKEN VERIFICATION ENGINE -->
+            <section class="card verification-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-shield-halved"></i> Cryptographic Token Verification Engine</h2>
+                </div>
+                <p class="section-desc">Paste a student's generated submission proof token below to validate timestamp authenticity and SHA-256 checksum integrity during network drops.</p>
+
+                <div class="input-group">
+                    <input type="text" id="tokenInput" placeholder="Paste Proof Token (e.g., PROOF-SHA256-8A1X9)...">
+                    <button class="verify-btn" onclick="verifyToken()"><i class="fa-solid fa-magnifying-glass"></i> Verify Token</button>
+                </div>
+
+                <div id="verificationResult" class="result-box hidden"></div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- STUDENT ATTENDANCE PORTAL MODAL (10 STUDENTS XYZ 1 TO 10) -->
+    <div id="attendanceModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3><i class="fa-solid fa-clipboard-user"></i> Student Attendance Marking Portal</h3>
+                    <span id="modalSubjectTitle" class="modal-sub">Java Programming (IFA2301N)</span>
+                </div>
+                <button class="modal-close-btn" onclick="closeAttendanceModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <p class="roster-hint">Mark attendance status for enrolled students (Section 321):</p>
+                
+                <div class="student-roster-list">
+                    <!-- Student 1 to 10 Roster -->
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 1</strong><span>Roll No: A71015849201 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std1" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std1" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 2</strong><span>Roll No: A71015849202 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std2" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std2" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 3</strong><span>Roll No: A71015849203 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std3" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std3" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 4</strong><span>Roll No: A71015849204 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std4" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std4" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 5</strong><span>Roll No: A71015849205 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std5" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std5" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 6</strong><span>Roll No: A71015849206 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std6" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std6" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 7</strong><span>Roll No: A71015849207 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std7" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std7" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 8</strong><span>Roll No: A71015849208 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std8" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std8" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 9</strong><span>Roll No: A71015849209 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std9" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std9" value="absent"> Absent</label>
+                        </div>
+                    </div>
+
+                    <div class="roster-item">
+                        <div class="student-meta"><strong>XYZ Student 10</strong><span>Roll No: A71015849210 | BCA 3rd Sem</span></div>
+                        <div class="toggle-group">
+                            <label class="toggle-label present"><input type="radio" name="att_std10" value="present" checked> Present</label>
+                            <label class="toggle-label absent"><input type="radio" name="att_std10" value="absent"> Absent</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-submit-att" onclick="submitStudentAttendance()">
+                    <i class="fa-solid fa-floppy-disk"></i> Submit & Sync Attendance
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="faculty.js"></script>
+</body>
+</html>

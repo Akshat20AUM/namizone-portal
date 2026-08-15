@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMIZONE - Portal Login</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="main-card">
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <h1 class="namizone-logo">NAMI<span class="lightning">Z</span>ONE</h1>
+        </div>
+
+        <!-- ================= STUDENT VIEW ================= -->
+        <div id="studentView" class="content-body">
+            <!-- Blanked Out Left Banner Area -->
+            <div class="left-banner-blank"></div>
+
+            <!-- Right Student Login Section -->
+            <div class="right-login-section">
+                <div class="login-header-row">
+                    <span class="login-title">LOGIN</span>
+                    <span class="role-selector">
+                        <a href="#" class="role-link active" onclick="switchPortal('student')">STUDENT</a>
+                        <span class="divider">|</span>
+                        <a href="#" class="role-link" onclick="switchPortal('faculty')">FACULTY</a>
+                    </span>
+                </div>
+
+                <form id="studentLoginForm" onsubmit="handleLogin(event, 'student')">
+                    <div class="input-field-wrapper">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" id="studentUserId" value="13094348" placeholder="User ID" required>
+                    </div>
+
+                    <div class="input-field-wrapper">
+                        <i class="fa-solid fa-lock input-icon"></i>
+                        <input type="password" id="studentPassword" value="••••••" placeholder="Password" required>
+                    </div>
+
+                    <div class="captcha-box">
+                        <div class="captcha-left">
+                            <div class="checkmark-circle">
+                                <i class="fa-solid fa-check"></i>
+                            </div>
+                            <span class="captcha-text">Success!</span>
+                        </div>
+                        <div class="captcha-right">
+                            <span class="cf-logo"><i class="fa-solid fa-cloud"></i> CLOUDFLARE</span>
+                            <span class="cf-subtext">Privacy • Terms</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="login-btn green-btn">LOGIN</button>
+
+                    <div class="forgot-row">
+                        <span>Forgot</span> <a href="#">Username</a> / <a href="#">Password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- ================= FACULTY VIEW ================= -->
+        <div id="facultyView" class="content-body hidden">
+            <!-- Left Yellow Faculty Box -->
+            <div class="faculty-login-box">
+                <div class="faculty-header-row">
+                    <span class="faculty-title">Login</span>
+                    <span class="faculty-subtitle">
+                        <a href="#" onclick="switchPortal('student')" class="switch-back-link">Student</a> | Staff / Faculty
+                    </span>
+                </div>
+
+                <form id="facultyLoginForm" onsubmit="handleLogin(event, 'faculty')">
+                    <div class="faculty-field">
+                        <label for="facultyUser">User Name</label>
+                        <input type="text" id="facultyUser" value="FAC90421" required>
+                    </div>
+
+                    <div class="faculty-field">
+                        <label for="facultyPwd">Password</label>
+                        <input type="password" id="facultyPwd" value="••••••" required>
+                    </div>
+
+                    <div class="captcha-text-instruction">
+                        Type the characters in the box below
+                    </div>
+
+                    <div class="text-captcha-image">
+                        avmkv
+                    </div>
+
+                    <div class="faculty-field">
+                        <input type="text" id="captchaInput" placeholder="Enter captcha text" value="avmkv" required>
+                    </div>
+
+                    <div class="get-password-row">
+                        <span class="yellow-dot">●</span> <a href="#">Get Password ?</a>
+                    </div>
+
+                    <button type="submit" class="faculty-btn">Login</button>
+                </form>
+            </div>
+
+            <!-- Blanked Out Right Banner Area -->
+            <div class="right-banner-blank"></div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

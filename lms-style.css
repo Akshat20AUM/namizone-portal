@@ -1,0 +1,395 @@
+/* ==========================================================================
+   NAMIZONE AMS — SYLLABUS BREAKDOWN PAGE STYLESHEET
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', Arial, sans-serif;
+}
+
+body {
+    background-color: #e9eef4;
+    color: #1a202c;
+    font-size: 13px;
+    line-height: 1.5;
+    padding-bottom: 40px;
+}
+
+.ams-page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+}
+
+/* HEADER TOOLBAR */
+.ams-header {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    margin-bottom: 15px;
+}
+
+.ams-logo {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1e3a8a;
+    letter-spacing: -0.5px;
+}
+
+.ams-sub-logo {
+    font-size: 0.72rem;
+    color: #64748b;
+    border-left: 1px solid #cbd5e1;
+    padding-left: 10px;
+}
+
+.ams-nav {
+    display: flex;
+    gap: 12px;
+    margin-left: 10px;
+}
+
+.ams-nav a {
+    color: #1d4ed8;
+    text-decoration: underline;
+    font-size: 0.78rem;
+}
+
+.ams-nav a.active {
+    font-weight: bold;
+    color: #0f172a;
+    text-decoration: none;
+}
+
+.ams-header-icons {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.icon-btn {
+    cursor: pointer;
+}
+
+.icon-btn:hover {
+    color: #1d4ed8;
+}
+
+.user-rank {
+    font-weight: bold;
+    color: #334155;
+    cursor: pointer;
+}
+
+/* STUDENT GREETING BAR */
+.student-greeting-sec {
+    margin-bottom: 15px;
+}
+
+.student-greeting-sec h2 {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.greeting-sub {
+    font-size: 0.78rem;
+    color: #475569;
+}
+
+.term-tag {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* SYLLABUS MAIN CONTENT */
+.syllabus-main {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sec-title h2 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.semester-std {
+    font-size: 0.75rem;
+    color: #475569;
+}
+
+.course-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* COURSE CARD BLOCKS (FULL-WIDTH STYLED PANELS) */
+.course-card-block {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.course-code-tag {
+    font-size: 0.68rem;
+    color: #64748b;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.course-title-text a {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.faculty-name, .progress-text {
+    font-size: 0.76rem;
+    color: #334155;
+    margin-top: 2px;
+}
+
+.demo-breakdown {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.demo-breakdown h4 {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.demo-breakdown ul {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.demo-breakdown li {
+    font-size: 0.75rem;
+    color: #334155;
+}
+
+.btn-archive {
+    align-self: flex-start;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    color: #1e293b;
+    padding: 6px 12px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    margin-top: 8px;
+}
+
+.btn-archive:hover {
+    background: #e2e8f0;
+}
+
+/* BOTTOM AI ASSISTANT CARD */
+.ams-bot-card {
+    position: fixed;
+    bottom: 0;
+    left: 20px;
+    width: 380px;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+}
+
+.bot-header {
+    background: #0f172a;
+    color: #ffffff;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+}
+
+.status-live {
+    font-size: 0.65rem;
+    color: #4ade80;
+    margin-left: 6px;
+}
+
+.bot-close {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.bot-close:hover {
+    color: #ffffff;
+}
+
+.bot-body {
+    padding: 10px;
+    font-size: 0.72rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    background: #f8fafc;
+}
+
+.pending-box {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pending-title {
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.pending-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 6px;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pending-item.urgent {
+    border-left: 3px solid #ef4444;
+    background: #fff5f5;
+}
+
+.pending-item p {
+    font-size: 0.68rem;
+    color: #475569;
+}
+
+.btn-sub-mini {
+    background: #16a34a;
+    color: white;
+    border: none;
+    padding: 3px 8px;
+    border-radius: 2px;
+    font-size: 0.65rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tip-text {
+    font-size: 0.68rem;
+    color: #64748b;
+}
+
+.bot-footer {
+    display: flex;
+    padding: 6px;
+    background: #ffffff;
+    border-top: 1px solid #cbd5e1;
+    gap: 4px;
+}
+
+.bot-footer input {
+    flex: 1;
+    padding: 4px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 3px;
+    font-size: 0.72rem;
+}
+
+.bot-footer button {
+    background: #004b8d;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+/* DARK MODE OVERRIDES */
+body.dark-mode {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .ams-header,
+body.dark-mode .course-card-block,
+body.dark-mode .ams-bot-card,
+body.dark-mode .pending-box,
+body.dark-mode .bot-footer {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+body.dark-mode .student-greeting-sec h2,
+body.dark-mode .sec-title h2,
+body.dark-mode .demo-breakdown h4,
+body.dark-mode .pending-title {
+    color: #f8fafc !important;
+}
+
+body.dark-mode .ams-nav a {
+    color: #38bdf8 !important;
+}
+
+body.dark-mode .course-title-text a {
+    color: #60a5fa !important;
+}
+
+body.dark-mode .greeting-sub,
+body.dark-mode .term-tag,
+body.dark-mode .semester-std,
+body.dark-mode .faculty-name,
+body.dark-mode .progress-text,
+body.dark-mode .demo-breakdown li,
+body.dark-mode .pending-item p,
+body.dark-mode .tip-text {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .pending-item {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .btn-archive {
+    background-color: #334155 !important;
+    border-color: #475569 !important;
+    color: #f8fafc !important;
+}
+
+.hidden { display: none !important; }

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMIZONE AMS - Syllabus Breakdown</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ==========================================================================
+           NAMIZONE AMS - EXACT UI LAYOUT
+           ========================================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: #0f172a;
+            font-size: 13px;
+            padding-bottom: 60px;
+        }
+
+        /* TOP NAVIGATION HEADER */
+        .top-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-badge {
+            background: #004b8d;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .logo-badge span {
+            color: #f59e0b;
+        }
+
+        .logo-subtext {
+            font-size: 0.65rem;
+            color: #64748b;
+            line-height: 1.1;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #334155;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding-bottom: 18px;
+            margin-top: 18px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-links a.active, .nav-links a:hover {
+            color: #0284c7;
+            border-bottom-color: #0284c7;
+            font-weight: 700;
+        }
+
+        .nav-user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .icon-trigger {
+            position: relative;
+            font-size: 1rem;
+            color: #475569;
+            cursor: pointer;
+        }
+
+        .icon-trigger .badge-count {
+            position: absolute;
+            top: -6px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: bold;
+            padding: 1px 5px;
+            border-radius: 10px;
+        }
+
+        .user-grade-tag {
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+        }
+
+        /* MAIN CONTAINER */
+        .page-content {
+            max-width: 1000px;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* GREETING CARD */
+        .greeting-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 24px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .greeting-text h1 {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .greeting-text p {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .academic-term-box {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .term-label {
+            font-size: 0.7rem;
+            color: #0369a1;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .term-val {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #0284c7;
+        }
+
+        /* SECTION HEADER */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+        .standard-badge {
+            background: #dbeafe;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+        }
+
+        /* COURSE BLOCKS */
+        .course-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .course-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .course-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .code-pill {
+            background: #004b8d;
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 3px;
+            display: inline-block;
+            margin-bottom: 6px;
+        }
+
+        .course-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #0284c7;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .faculty-info {
+            font-size: 0.8rem;
+            color: #475569;
+        }
+
+        .progress-side {
+            text-align: right;
+            width: 220px;
+        }
+
+        .progress-label {
+            font-size: 0.72rem;
+            color: #64748b;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .progress-val {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: #16a34a;
+            border-radius: 3px;
+        }
+
+        /* SYLLABUS BREAKDOWN BOX */
+        .syllabus-box {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 6px;
+            padding: 14px 18px;
+        }
+
+        .syllabus-box-title {
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #1e293b;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .syllabus-units {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .syllabus-units p {
+            font-size: 0.78rem;
+            color: #475569;
+            line-height: 1.4;
+        }
+
+        .syllabus-units p strong {
+            color: #0f172a;
+        }
+
+        /* ARCHIVE BUTTON */
+        .archive-btn-wrap {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .btn-archive {
+            background: #e2e8f0;
+            color: #334155;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-archive:hover {
+            background: #cbd5e1;
+        }
+
+        /* FLOATING AI BOT ICON */
+        .floating-bot-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background: #004b8d;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            cursor: pointer;
+            z-index: 9999;
+        }
+
+        .bot-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ef4444;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 10px;
+            border: 2px solid #ffffff;
+        }
+
+        /* DARK MODE STYLES */
+        body.dark-mode {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .top-navbar,
+        body.dark-mode .greeting-card,
+        body.dark-mode .course-card {
+            background-color: #1e293b;
+            border-color: #334155;
+            color: #f8fafc;
+        }
+
+        body.dark-mode .nav-links a {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .nav-links a.active,
+        body.dark-mode .course-name {
+            color: #38bdf8;
+        }
+
+        body.dark-mode .greeting-text h1,
+        body.dark-mode .section-header h2,
+        body.dark-mode .progress-val,
+        body.dark-mode .syllabus-box-title,
+        body.dark-mode .syllabus-units p strong {
+            color: #f8fafc;
+        }
+
+        body.dark-mode .greeting-text p,
+        body.dark-mode .faculty-info,
+        body.dark-mode .progress-label,
+        body.dark-mode .syllabus-units p {
+            color: #cbd5e1;
+        }
+
+        body.dark-mode .syllabus-box {
+            background-color: #0f172a;
+            border-color: #334155;
+        }
+
+        body.dark-mode .academic-term-box {
+            background-color: #0f172a;
+            border-color: #0284c7;
+        }
+
+        body.dark-mode .btn-archive {
+            background-color: #334155;
+            color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOP NAVIGATION HEADER -->
+    <header class="top-navbar">
+        <div class="nav-logo-group">
+            <div class="logo-badge">NAMIZONE <span>AMS</span></div>
+            <div class="logo-subtext">Assignment Management System</div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="dashboard.html">Home</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="lms.html" class="active">My courses</a>
+            <a href="#">Namizone Self Service</a>
+            <a href="#">E-Content</a>
+            <a href="#">Report Dashboard</a>
+        </nav>
+
+        <div class="nav-user-actions">
+            <!-- GEAR ICON DARK MODE TOGGLE -->
+            <div class="icon-trigger" onclick="toggleDarkMode()" title="Toggle Dark/Night Mode">
+                <i class="fa-solid fa-gear" id="themeIcon"></i>
+            </div>
+            <div class="icon-trigger">
+                <i class="fa-solid fa-bell"></i>
+                <span class="badge-count">10</span>
+            </div>
+            <div class="icon-trigger">
+                <i class="fa-solid fa-comment"></i>
+            </div>
+            <div class="user-grade-tag">
+                A- <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAGE CONTAINER -->
+    <div class="page-content">
+        
+        <!-- GREETING CARD -->
+        <section class="greeting-card">
+            <div class="greeting-text">
+                <h1>Hi, XYZ Student! 👋</h1>
+                <p>Semester Course Catalog, Faculty Directory & Demo Syllabus Overview</p>
+            </div>
+            <div class="academic-term-box">
+                <span class="term-label">Academic Term:</span>
+                <span class="term-val">2026-2027 / Odd Semester</span>
+            </div>
+        </section>
+
+        <!-- SECTION HEADER -->
+        <div class="section-header">
+            <h2>Active Courses & Syllabus Breakdown</h2>
+            <span class="standard-badge"><i class="fa-regular fa-calendar"></i> Semester Standard: 45 Classes per Subject</span>
+        </div>
+
+        <!-- COURSE BLOCKS LIST -->
+        <main class="course-list">
+            
+            <!-- Course 1: Mathematical Aptitude -->
+            <article class="course-card">
+                <div class="course-card-top">
+                    <div>
+                        <span class="code-pill">IFA2303N</span>
+                        <a href="#" class="course-name">Mathematical Aptitude</a>
+                        <div class="faculty-info"><i class="fa-solid fa-user-tie"></i> Faculty: <strong>Prof. XYZ</strong></div>
+                    </div>
+                    <div class="progress-side">
+                        <span class="progress-label">Semester Progress:</span>
+                        <div class="progress-val">12 / 45 Classes Completed</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 26.6%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="syllabus-box">
+                    <div class="syllabus-box-title"><i class="fa-solid fa-book"></i> Demo Syllabus Breakdown</div>
+                    <div class="syllabus-units">
+                        <p><strong>Unit 1 (Classes 1–10):</strong> Number Systems, Percentages, and Profit & Loss Analysis.</p>
+                        <p><strong>Unit 2 (Classes 11–20):</strong> Ratio & Proportion, Averages, Time, Speed, and Distance.</p>
+                        <p><strong>Unit 3 (Classes 21–30):</strong> Permutations, Combinations, Probability, and Data Interpretation.</p>
+                        <p><strong>Unit 4 (Classes 31–45):</strong> Analytical Reasoning, Logical Sequences, and Final Exam Revisions.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Course 2: Java Programming -->
+            <article class="course-card">
+                <div class="course-card-top">
+                    <div>
+                        <span class="code-pill">IFA2301N</span>
+                        <a href="#" class="course-name">Java Programming</a>
+                        <div class="faculty-info"><i class="fa-solid fa-user-tie"></i> Faculty: <strong>Prof. XYZ</strong></div>
+                    </div>
+                    <div class="progress-side">
+                        <span class="progress-label">Semester Progress:</span>
+                        <div class="progress-val">18 / 45 Classes Completed</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 40%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="syllabus-box">
+                    <div class="syllabus-box-title"><i class="fa-solid fa-book"></i> Demo Syllabus Breakdown</div>
+                    <div class="syllabus-units">
+                        <p><strong>Unit 1 (Classes 1–10):</strong> Object-Oriented Principles, JVM Architecture, and Datatypes.</p>
+                        <p><strong>Unit 2 (Classes 11–20):</strong> Inheritance, Interfaces, Polymorphism, and Package Management.</p>
+                        <p><strong>Unit 3 (Classes 21–32):</strong> Exception Handling, Multithreading, and I/O Streams.</p>
+                        <p><strong>Unit 4 (Classes 33–45):</strong> Java Collections Framework, Lambda Expressions, and JDBC Connectivity.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Course 3: Machine Learning Lab -->
+            <article class="course-card">
+                <div class="course-card-top">
+                    <div>
+                        <span class="code-pill">IFA2316N</span>
+                        <a href="#" class="course-name">Machine Learning Lab</a>
+                        <div class="faculty-info"><i class="fa-solid fa-user-tie"></i> Faculty: <strong>Prof. XYZ</strong></div>
+                    </div>
+                    <div class="progress-side">
+                        <span class="progress-label">Semester Progress:</span>
+                        <div class="progress-val">15 / 45 Classes Completed</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 33.3%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="syllabus-box">
+                    <div class="syllabus-box-title"><i class="fa-solid fa-book"></i> Demo Syllabus Breakdown</div>
+                    <div class="syllabus-units">
+                        <p><strong>Unit 1 (Classes 1–12):</strong> NumPy, Pandas, Data Preprocessing, and Visualizations in Python.</p>
+                        <p><strong>Unit 2 (Classes 13–24):</strong> Implementing Linear/Logistic Regression & Decision Trees via Scikit-Learn.</p>
+                        <p><strong>Unit 3 (Classes 25–35):</strong> Clustering Models (K-Means), SVM Implementations, and Model Metrics.</p>
+                        <p><strong>Unit 4 (Classes 36–45):</strong> Neural Networks with TensorFlow/Keras & Capstone Project Evaluation.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Course 4: Machine Learning -->
+            <article class="course-card">
+                <div class="course-card-top">
+                    <div>
+                        <span class="code-pill">IFA2315N</span>
+                        <a href="#" class="course-name">Machine Learning</a>
+                        <div class="faculty-info"><i class="fa-solid fa-user-tie"></i> Faculty: <strong>Prof. XYZ</strong></div>
+                    </div>
+                    <div class="progress-side">
+                        <span class="progress-label">Semester Progress:</span>
+                        <div class="progress-val">14 / 45 Classes Completed</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 31.1%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="syllabus-box">
+                    <div class="syllabus-box-title"><i class="fa-solid fa-book"></i> Demo Syllabus Breakdown</div>
+                    <div class="syllabus-units">
+                        <p><strong>Unit 1 (Classes 1–11):</strong> Supervised vs Unsupervised Learning, Bias-Variance Tradeoff.</p>
+                        <p><strong>Unit 2 (Classes 12–22):</strong> Parametric Algorithms, Gradient Descent Optimization, Loss Functions.</p>
+                        <p><strong>Unit 3 (Classes 23–34):</strong> Ensemble Methods, Random Forests, Boosting Algorithms (XGBoost).</p>
+                        <p><strong>Unit 4 (Classes 35–45):</strong> Dimensionality Reduction (PCA), Deep Learning Fundamentals.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Course 5: Java Programming Lab -->
+            <article class="course-card">
+                <div class="course-card-top">
+                    <div>
+                        <span class="code-pill">IFA2302N</span>
+                        <a href="#" class="course-name">Java Programming Lab</a>
+                        <div class="faculty-info"><i class="fa-solid fa-user-tie"></i> Faculty: <strong>Prof. XYZ</strong></div>
+                    </div>
+                    <div class="progress-side">
+                        <span class="progress-label">Semester Progress:</span>
+                        <div class="progress-val">10 / 45 Classes Completed</div>
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" style="width: 22.2%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="syllabus-box">
+                    <div class="syllabus-box-title"><i class="fa-solid fa-book"></i> Demo Syllabus Breakdown</div>
+                    <div class="syllabus-units">
+                        <p><strong>Unit 1 (Classes 1–12):</strong> Setting up JDK, IDEs, and Writing Class/Object Structures.</p>
+                        <p><strong>Unit 2 (Classes 13–24):</strong> Practical Implementation of File Input/Output and Exception Blocks.</p>
+                        <p><strong>Unit 3 (Classes 25–35):</strong> GUI Development using Swing/JavaFX & Thread Management Execution.</p>
+                        <p><strong>Unit 4 (Classes 36–45):</strong> Database CRUD Operations with JDBC and Final Practical Viva.</p>
+                    </div>
+                </div>
+            </article>
+
+        </main>
+
+        <!-- FULL ARCHIVE BUTTON -->
+        <div class="archive-btn-wrap">
+            <button class="btn-archive">View Full Syllabus Archive</button>
+        </div>
+    </div>
+
+    <!-- FLOATING AI CHATBOT TRIGGER BUTTON -->
+    <div class="floating-bot-btn" onclick="window.location.href='dashboard.html'" title="Click to view AI Guardian">
+        <i class="fa-solid fa-robot"></i>
+        <span class="bot-badge">3</span>
+    </div>
+
+    <!-- PERSISTENT DARK MODE SCRIPT -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('namizone_theme');
+            const icon = document.getElementById('themeIcon');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                if (icon) {
+                    icon.style.color = '#38bdf8';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            }
+        });
+
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDark = body.classList.toggle('dark-mode');
+            localStorage.setItem('namizone_theme', isDark ? 'dark' : 'light');
+
+            const icon = document.getElementById('themeIcon');
+            if (icon) {
+                if (isDark) {
+                    icon.style.color = '#38bdf8';
+                    icon.style.transform = 'rotate(180deg)';
+                    icon.style.transition = 'transform 0.4s ease, color 0.3s ease';
+                } else {
+                    icon.style.color = '';
+                    icon.style.transform = 'rotate(0deg)';
+                    icon.style.transition = 'transform 0.4s ease, color 0.3s ease';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

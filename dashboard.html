@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NAMIZONE - XYZ University Dashboard</title>
+    <link rel="stylesheet" href="dashboard-style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- TensorFlow.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0/dist/tf.min.js"></script>
+    <!-- Client-Side PDF Compression Library -->
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+</head>
+<body>
+
+    <!-- REAL-TIME FACULTY NOTIFICATION TOAST CONTAINER -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- TOP HEADER BAR -->
+    <header class="top-header">
+        <div class="header-left">
+            <div class="logo-box">
+                <h1 class="namizone-logo">NAMI<span class="lightning">Z</span>ONE</h1>
+            </div>
+            <div class="uni-name">XYZ University</div>
+        </div>
+
+        <div class="header-right">
+            <!-- INTERACTIVE BELL ICON & NOTIFICATION DRAWER -->
+            <div class="nav-icon-badge" id="bellIconBtn" onclick="toggleNotificationPanel()" title="Faculty Updates & Alerts">
+                <i class="fa-solid fa-bell"></i>
+                <span class="badge red" id="bellBadgeCount">3</span>
+            </div>
+
+            <div class="nav-icon-badge"><i class="fa-solid fa-book"></i><span class="badge">4</span></div>
+            
+            <!-- GEAR ICON CONVERTED TO DARK MODE TOGGLE -->
+            <div class="nav-icon-badge" id="themeToggleBtn" onclick="toggleDarkMode()" title="Toggle Dark Mode">
+                <i class="fa-solid fa-gear" id="themeIcon"></i>
+                <span class="badge">1</span>
+            </div>
+
+            <div class="nav-icon-badge"><i class="fa-solid fa-calendar-days"></i></div>
+            
+            <div class="user-profile">
+                <img src="https://via.placeholder.com/32" alt="User Profile" class="avatar">
+                <div class="user-info">
+                    <span class="user-name">STUDENT USER</span>
+                    <span class="user-sub" id="userRollNumber">Loading ID...</span>
+                </div>
+                <i class="fa-solid fa-right-from-bracket logout-icon" onclick="logout()" title="Logout"></i>
+            </div>
+
+            <!-- LIVE FACULTY NOTIFICATION DRAWER PANEL -->
+            <div id="notificationPanel" class="notification-panel hidden">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <i class="fa-solid fa-bell text-blue"></i>
+                        <span>Faculty Updates & Alerts</span>
+                    </div>
+                    <button class="panel-close-btn" onclick="toggleNotificationPanel()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <div class="panel-body" id="notificationPanelList">
+                    <!-- Initial Faculty Notifications -->
+                    <div class="panel-item">
+                        <div class="item-icon class-start"><i class="fa-solid fa-chalkboard-user"></i></div>
+                        <div class="item-content">
+                            <strong>Prof. Java Faculty</strong>
+                            <p>Scheduled Session: Java Programming (IFA2301N)</p>
+                            <span class="item-time">Today, 01:00 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-item">
+                        <div class="item-icon assignment"><i class="fa-solid fa-file-circle-plus"></i></div>
+                        <div class="item-content">
+                            <strong>Prof. Java Faculty • Java Programming Lab</strong>
+                            <p>New Assignment: Unit 3 Multithreaded Banking Application</p>
+                            <span class="item-time">Yesterday, 04:15 PM</span>
+                        </div>
+                    </div>
+
+                    <div class="panel-item">
+                        <div class="item-icon quiz"><i class="fa-solid fa-pen-ruler"></i></div>
+                        <div class="item-content">
+                            <strong>Prof. Java Faculty • Java Programming</strong>
+                            <p>Pop Quiz #2: Multithreading & Exception Handling</p>
+                            <span class="item-time">2 days ago</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-footer">
+                    <button onclick="clearNotificationBadge()"><i class="fa-solid fa-check-double"></i> Mark All as Read</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li class="nav-item active"><i class="fa-solid fa-house"></i> Home</li>
+                <li class="nav-item"><i class="fa-solid fa-calendar"></i> My Calendar</li>
+                <li class="nav-item"><i class="fa-solid fa-laptop-code"></i> SAP</li>
+                <li class="nav-item" onclick="window.location.href='lms.html';"><i class="fa-solid fa-book-open"></i> My Courses (AMS)</li>
+                <li class="nav-item"><i class="fa-solid fa-id-card"></i> Registration</li>
+                <li class="nav-item"><i class="fa-solid fa-clock"></i> Time Table</li>
+                <li class="nav-item"><i class="fa-solid fa-users"></i> My Faculty</li>
+                <li class="nav-item dropdown"><i class="fa-solid fa-file-pen"></i> Examination <i class="fa-solid fa-chevron-down arrow"></i></li>
+                <li class="nav-item dropdown"><i class="fa-solid fa-graduation-cap"></i> Student Placement Hub <i class="fa-solid fa-chevron-down arrow"></i></li>
+                <li class="nav-item dropdown"><i class="fa-solid fa-folder"></i> Student Document <i class="fa-solid fa-chevron-down arrow"></i></li>
+                <li class="nav-item"><i class="fa-solid fa-receipt"></i> Fee Details</li>
+                <li class="nav-item"><i class="fa-solid fa-circle-info"></i> IAD</li>
+                <li class="nav-item"><i class="fa-solid fa-award"></i> Gssc Registration</li>
+                <li class="nav-item"><i class="fa-solid fa-headset"></i> Student Support Hub</li>
+                <li class="nav-item"><i class="fa-solid fa-newspaper"></i> The Global Times</li>
+                <li class="nav-item dropdown"><i class="fa-solid fa-clipboard-check"></i> NTCC <i class="fa-solid fa-chevron-down arrow"></i></li>
+            </ul>
+        </aside>
+
+        <!-- MAIN DASHBOARD CONTENT -->
+        <main class="main-content">
+            
+            <!-- TELEMETRY AI GUARDIAN BAR -->
+            <section class="telemetry-bar">
+                <div class="telemetry-item">
+                    <span class="label"><i class="fa-solid fa-location-dot"></i> Location:</span>
+                    <strong id="locationLabel">Live Network Scan Active</strong>
+                </div>
+                <div class="telemetry-item">
+                    <span class="label">AI Gateway:</span>
+                    <span id="networkState" class="status-pill green">🟢 Scanning...</span>
+                </div>
+                <div class="telemetry-item">
+                    <span class="label">RSSI:</span> <strong id="rssiValue">Measuring...</strong> | 
+                    <span class="label">Ping:</span> <strong id="pingValue">Measuring...</strong>
+                </div>
+                <div class="ai-banner-mini" id="aiBannerText">
+                    🔄 <strong>AI Guardian:</strong> Establishing real-time gateway latency diagnostic...
+                </div>
+            </section>
+
+            <!-- BREADCRUMB -->
+            <div class="breadcrumb">
+                <i class="fa-solid fa-house"></i> Home &gt; Dashboard
+            </div>
+
+            <!-- TOP 4 METRIC WIDGETS -->
+            <div class="top-widgets">
+                
+                <!-- Attendance Widget -->
+                <div class="widget-card widget-attendance">
+                    <div class="widget-title">Attendance</div>
+                    <div class="donut-container">
+                        <div class="legend">
+                            <span class="leg-item"><span class="dot green"></span> Above 85%</span>
+                            <span class="leg-item"><span class="dot orange"></span> 75% to 85%</span>
+                            <span class="leg-item"><span class="dot red"></span> Below 75%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fee Widget -->
+                <div class="widget-card widget-fee">
+                    <h2>No Fee Due</h2>
+                </div>
+
+                <!-- SMART FILE & PDF COMPRESSION SELECTOR (POWERED BY TENSORFLOW.JS) -->
+                <div class="widget-card widget-feature">
+                    <div class="feature-header">
+                        <h3><i class="fa-solid fa-brain"></i> TensorFlow Smart QoS Compression</h3>
+                    </div>
+                    <div class="feature-body">
+                        <div class="scale-control">
+                            <label for="compressionRange">Adaptive Quality Scaling (QoS):</label>
+                            <input type="range" id="compressionRange" min="10" max="100" value="40" oninput="updateScaleLabel(this.value)">
+                            <div class="scale-status">
+                                Target Scaling: <strong id="scaleValue">40%</strong> 
+                                <span id="aiPredictBadge" class="ai-badge hidden">🤖 TensorFlow Predicted</span>
+                            </div>
+                        </div>
+
+                        <div class="mini-upload-row">
+                            <input type="file" id="dashboardFile" accept="application/pdf, image/jpeg, image/png" onchange="handleFileChange(event)">
+                            <button class="btn-ai" onclick="predictAndCompressWithTF()">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> AI Predict & Compress
+                            </button>
+                        </div>
+
+                        <!-- Real-time Compression Stats -->
+                        <div id="compressionStats" class="compression-stats hidden">
+                            <div class="stat-box original">
+                                <span>Original Size:</span>
+                                <strong id="originalSize">0 KB</strong>
+                            </div>
+                            <div class="stat-box compressed">
+                                <span>Compressed:</span>
+                                <strong id="compressedSize">0 KB</strong>
+                            </div>
+                        </div>
+
+                        <div id="proofOutput" class="proof-output hidden"></div>
+                        
+                        <canvas id="compressionCanvas" style="display:none;"></canvas>
+                    </div>
+                </div>
+
+                <!-- CGPA Chart Widget -->
+                <div class="widget-card widget-cgpa">
+                    <div class="widget-title">CGPA : 8.23</div>
+                    <div class="chart-box">
+                        <div class="line-chart-placeholder">
+                            <span class="point p1">1</span>
+                            <span class="point p2">2</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- MIDDLE CONTENT GRID: MY CLASSES & MY ATTENDANCE -->
+            <div class="bottom-grid">
+                
+                <!-- MY CLASSES SECTION -->
+                <div class="grid-card my-classes-card">
+                    <div class="card-header-bar">
+                        <h2>My Classes</h2>
+                        <div class="date-controls">
+                            <button class="nav-btn">&lt;</button>
+                            <button class="nav-btn">&gt;</button>
+                            <button class="cal-btn"><i class="fa-solid fa-calendar-day"></i></button>
+                            <span class="current-date">August 10, 2026</span>
+                        </div>
+                    </div>
+
+                    <div class="classes-list">
+                        <div class="day-heading">Monday</div>
+
+                        <!-- Slot 1 -->
+                        <div class="class-row">
+                            <span class="time-col">11:10 - 12:00</span>
+                            <span class="status-dot green">●</span>
+                            <div class="class-info">
+                                <strong>Mathematical Aptitude (IFA2303N)</strong>
+                                <span>Faculty: Prof. XYZ</span>
+                                <span class="room">Room 414</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 2 -->
+                        <div class="class-row">
+                            <span class="time-col">13:00 - 13:50</span>
+                            <span class="status-dot green">●</span>
+                            <div class="class-info">
+                                <strong>Java Programming (IFA2301N)</strong>
+                                <span>Faculty: Prof. Java Faculty</span>
+                                <span class="room">Room 414</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 3 -->
+                        <div class="class-row">
+                            <span class="time-col">14:00 - 14:50</span>
+                            <span class="status-dot blue">●</span>
+                            <div class="class-info">
+                                <strong>Machine Learning Lab (IFA2316N)</strong>
+                                <span>Faculty: Prof. XYZ</span>
+                                <span class="room">Lab 202</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 4 -->
+                        <div class="class-row">
+                            <span class="time-col">15:00 - 15:50</span>
+                            <span class="status-dot green">●</span>
+                            <div class="class-info">
+                                <strong>Machine Learning Theory (IFA2315N)</strong>
+                                <span>Faculty: Prof. XYZ</span>
+                                <span class="room">Room 414</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 5 -->
+                        <div class="class-row unassigned">
+                            <span class="time-col">16:00 - 16:50</span>
+                            <span class="status-dot gray">●</span>
+                            <div class="class-info">
+                                <strong>Java Programming Lab (IFA2302N)</strong>
+                                <span>Faculty: Prof. Java Faculty</span>
+                                <span class="room">Lab 105</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 6 -->
+                        <div class="class-row unassigned">
+                            <span class="time-col">17:00 - 17:50</span>
+                            <span class="status-dot gray">●</span>
+                            <div class="class-info">
+                                <strong>German-III (FLG2311N)</strong>
+                                <span>Faculty: Prof. XYZ</span>
+                                <span class="room">Room 308</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 7 -->
+                        <div class="class-row unassigned">
+                            <span class="time-col">18:00 - 18:50</span>
+                            <span class="status-dot gray">●</span>
+                            <div class="class-info">
+                                <strong>Open Study & Mentorship Session</strong>
+                                <span>Faculty: Prof. XYZ</span>
+                                <span class="room">Central Hall</span>
+                            </div>
+                        </div>
+
+                        <!-- Slot 8 -->
+                        <div class="class-row unassigned">
+                            <span class="time-col">19:00 - 19:50</span>
+                            <span class="status-dot gray">●</span>
+                            <div class="class-info">
+                                <strong>Self Study Slot</strong>
+                                <span>Faculty: N/A</span>
+                                <span class="room">Library</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- MY ATTENDANCE SECTION -->
+                <div class="grid-card my-attendance-card">
+                    <div class="card-header-bar">
+                        <h2>My Attendance</h2>
+                    </div>
+
+                    <div class="attendance-list">
+                        
+                        <!-- Subject 1 -->
+                        <div class="attendance-item">
+                            <div class="sub-details">
+                                <span class="sub-code">FLG2311N</span>
+                                <span class="sub-name">German-III</span>
+                            </div>
+                            <div class="att-right">
+                                <span class="fraction">5/6</span>
+                                <div class="percentage-badge yellow">83.33%</div>
+                            </div>
+                        </div>
+
+                        <!-- Subject 2 -->
+                        <div class="attendance-item">
+                            <div class="sub-details">
+                                <span class="sub-code">IFA2301N</span>
+                                <span class="sub-name">Java Programming</span>
+                            </div>
+                            <div class="att-right">
+                                <span class="fraction">9/10</span>
+                                <div class="percentage-badge green">90.00%</div>
+                            </div>
+                        </div>
+
+                        <!-- Subject 3 -->
+                        <div class="attendance-item">
+                            <div class="sub-details">
+                                <span class="sub-code">IFA2302N</span>
+                                <span class="sub-name">Java Programming Lab</span>
+                            </div>
+                            <div class="att-right">
+                                <span class="fraction">2/2</span>
+                                <div class="percentage-badge green">100.00%</div>
+                            </div>
+                        </div>
+
+                        <!-- Subject 4 -->
+                        <div class="attendance-item">
+                            <div class="sub-details">
+                                <span class="sub-code">IFA2315N</span>
+                                <span class="sub-name">Machine Learning</span>
+                            </div>
+                            <div class="att-right">
+                                <span class="fraction">6/7</span>
+                                <div class="percentage-badge green">85.71%</div>
+                            </div>
+                        </div>
+
+                        <!-- Subject 5 -->
+                        <div class="attendance-item">
+                            <div class="sub-details">
+                                <span class="sub-code">IFA2316N</span>
+                                <span class="sub-name">Machine Learning Lab</span>
+                            </div>
+                            <div class="att-right">
+                                <span class="fraction">6/6</span>
+                                <div class="percentage-badge green">100.00%</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- LOWER DASHBOARD GRID: UTILITIES, NOTICES, RECOVERY & SYNC PANELS -->
+            <div class="lower-grid">
+                
+                <!-- ROW 1: UTILITY WIDGETS -->
+                <div class="utility-row">
+                    <!-- Library Card -->
+                    <div class="grid-card util-card">
+                        <div class="card-header-bar">
+                            <h2>XYZ Central Library (OPAC)</h2>
+                        </div>
+                        <div class="util-body">
+                            <p><i class="fa-solid fa-user"></i> <strong>User-id :</strong> 13094348 &nbsp; <i class="fa-solid fa-key"></i> <strong>Password :</strong> <a href="#" onclick="return false;">Show</a></p>
+                            <p class="sub-text">EBSCO Online : Business Journal : 2,300 journals, more than 1,100 peer-reviewed</p>
+                            <div class="btn-row">
+                                <button class="btn-blue"><i class="fa-solid fa-book"></i> eLibrary</button>
+                                <button class="btn-gray">Read more <i class="fa-solid fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email Card -->
+                    <div class="grid-card util-card">
+                        <div class="card-header-bar">
+                            <h2>Email</h2>
+                        </div>
+                        <div class="util-body">
+                            <p><i class="fa-solid fa-envelope"></i> <strong>Email-id :</strong> student.user@xyz.edu</p>
+                            <p><i class="fa-solid fa-key"></i> <strong>Password :</strong> <a href="#" onclick="return false;">Show</a></p>
+                            <div class="btn-row">
+                                <button class="btn-orange"><i class="fa-solid fa-envelope-open"></i> Check Emails</button>
+                                <button class="btn-blue"><i class="fa-brands fa-microsoft"></i> Office 365</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AMS Card (Linked to lms.html) -->
+                    <div class="grid-card util-card">
+                        <div class="card-header-bar">
+                            <h2>AMS</h2>
+                        </div>
+                        <div class="util-body">
+                            <p class="sub-text">Access session plans, course materials, Internal Assessments etc.</p>
+                            <div class="btn-col">
+                                <button class="btn-green" onclick="window.location.href='lms.html';">
+                                    <i class="fa-solid fa-file-lines"></i> 2026-2027/Odd
+                                </button>
+                                <button class="btn-green" onclick="window.location.href='lms.html';">
+                                    <i class="fa-solid fa-file-lines"></i> 2025-2026/Even
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Virtual Card -->
+                    <div class="grid-card util-card">
+                        <div class="card-header-bar">
+                            <h2>Virtual</h2>
+                        </div>
+                        <div class="util-body">
+                            <div class="btn-col">
+                                <button class="btn-orange"><i class="fa-solid fa-flask"></i> Virtual Lab</button>
+                                <button class="btn-green"><i class="fa-solid fa-microscope"></i> Research Repository</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ROW 2: NOTICES, RECOVERY MANAGER & SYNC DASHBOARD -->
+                <div class="secondary-grid">
+                    
+                    <!-- NOTICES SECTION -->
+                    <div class="grid-card notices-card">
+                        <div class="card-header-tabs">
+                            <button class="tab-btn active"><i class="fa-solid fa-bell"></i> Notices <span class="badge-count">16</span></button>
+                            <button class="tab-btn"><i class="fa-solid fa-file-pen"></i> Exam Notices <span class="badge-count red">4</span></button>
+                        </div>
+                        <div class="notices-list">
+                            <div class="notice-item">
+                                <a href="#" class="notice-title"><i class="fa-solid fa-bell green"></i> Notice for bus service for odd semester 2026-27</a>
+                                <span class="notice-date"><i class="fa-regular fa-clock"></i> 08 Jul 2026</span>
+                                <p class="notice-desc">Notice for bus service route alterations for odd semester 2026-27.</p>
+                            </div>
+                            <div class="notice-item">
+                                <a href="#" class="notice-title"><i class="fa-solid fa-bell green"></i> Notice to all senior batch students of end examination</a>
+                                <span class="notice-date"><i class="fa-regular fa-clock"></i> 01 Jul 2026</span>
+                                <p class="notice-desc">Final notice regarding program completion and document verifications.</p>
+                            </div>
+                            <div class="notice-item">
+                                <a href="#" class="notice-title"><i class="fa-solid fa-bell green"></i> Fees notice for UG-Sem V, Sem VII & Sem IX</a>
+                                <span class="notice-date"><i class="fa-regular fa-clock"></i> 03 Jun 2026</span>
+                                <p class="notice-desc">Detailed deadline breakdown for upcoming semester installment fees.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SAVED DRAFTS & FORM STATE RECOVERY MANAGER -->
+                    <div class="grid-card recovery-card">
+                        <div class="card-header-bar">
+                            <h2><i class="fa-solid fa-clock-rotate-left"></i> Saved Drafts & Form State Recovery Manager</h2>
+                        </div>
+                        <div class="recovery-body">
+                            <p class="section-hint">Auto-cached form inputs and quiz reflections recovered from interrupted offline sessions:</p>
+                            
+                            <div class="drafts-list">
+                                <div class="draft-item">
+                                    <div class="draft-info">
+                                        <strong>Machine Learning Lab - Quiz Reflection #3</strong>
+                                        <span>Cached: Today, 11:42 AM | 840 words</span>
+                                    </div>
+                                    <button class="btn-restore" onclick="restoreDraft('ML Quiz Reflection #3')"><i class="fa-solid fa-rotate-left"></i> Restore</button>
+                                </div>
+
+                                <div class="draft-item">
+                                    <div class="draft-info">
+                                        <strong>German-III Oral Exam Feedback Form</strong>
+                                        <span>Cached: Yesterday, 04:15 PM | Form Inputs</span>
+                                    </div>
+                                    <button class="btn-restore" onclick="restoreDraft('German-III Oral Form')"><i class="fa-solid fa-rotate-left"></i> Restore</button>
+                                </div>
+                            </div>
+
+                            <div id="draftRestoreAlert" class="restore-alert hidden"></div>
+                        </div>
+                    </div>
+
+                    <!-- LOCAL ASSIGNMENT QUEUE & SYNC STATUS DASHBOARD -->
+                    <div class="grid-card sync-dashboard-card">
+                        <div class="card-header-bar">
+                            <h2><i class="fa-solid fa-network-wired"></i> Local Assignment Queue & Sync Status</h2>
+                        </div>
+                        <div class="sync-body">
+                            <div class="queue-status-summary">
+                                <span class="queue-pill"><i class="fa-solid fa-box"></i> Pending Items: <strong id="pendingQueueCount">2</strong></span>
+                                <span class="queue-pill green"><i class="fa-solid fa-server"></i> Server Gateway: <strong>Connected</strong></span>
+                            </div>
+
+                            <div class="queue-items-list">
+                                <!-- Queue Item 1 -->
+                                <div class="queue-item">
+                                    <div class="queue-item-header">
+                                        <strong>Lab_Assignment_5_Compressed.pdf</strong>
+                                        <span class="sync-status-badge syncing"><i class="fa-solid fa-spinner fa-spin"></i> Syncing (68%)</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill" style="width: 68%;"></div>
+                                    </div>
+                                    <span class="queue-meta">Machine Learning Lab | Token: PROOF-SHA256-8A1X9</span>
+                                </div>
+
+                                <!-- Queue Item 2 -->
+                                <div class="queue-item">
+                                    <div class="queue-item-header">
+                                        <strong>Mathematical_Aptitude_Unit3.pdf</strong>
+                                        <span class="sync-status-badge queued"><i class="fa-solid fa-hourglass-start"></i> Queued</span>
+                                    </div>
+                                    <div class="progress-bar-bg">
+                                        <div class="progress-bar-fill queued-fill" style="width: 0%;"></div>
+                                    </div>
+                                    <span class="queue-meta">Mathematical Aptitude | Token: PROOF-SHA256-3F8M2</span>
+                                </div>
+
+                                <!-- Queue Item 3 -->
+                                <div class="queue-item completed">
+                                    <div class="queue-item-header">
+                                        <strong>Java_Programming_Assignment1.zip</strong>
+                                        <span class="sync-status-badge success"><i class="fa-solid fa-circle-check"></i> Synced to Server</span>
+                                    </div>
+                                    <span class="queue-meta">Java Programming | Reached Server Today at 10:14 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <!-- FLOATING AI ASSISTANT BOT ICON & CHAT WINDOW -->
+    <div class="bot-container">
+        
+        <!-- CHATBOX POPUP WINDOW -->
+        <div id="chatboxWindow" class="chatbox-window hidden">
+            <div class="chatbox-header">
+                <div class="bot-title-info">
+                    <i class="fa-solid fa-robot"></i>
+                    <div>
+                        <strong>Namizone AI Guardian</strong>
+                        <span class="online-indicator">🟢 Live Assistant</span>
+                    </div>
+                </div>
+                <button class="chat-close-btn" onclick="toggleChatbot()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="chatbox-body">
+                <div class="chat-message bot">
+                    <p>👋 Hi <strong>XYZ Student</strong>! I checked your portal. Here are all your combined <strong>pending assignments</strong> across all subjects:</p>
+                </div>
+
+                <!-- COMBINED PENDING ASSIGNMENTS LIST -->
+                <div class="pending-assignments-card">
+                    <div class="pending-header">
+                        <span><i class="fa-solid fa-clock"></i> Combined Pending List</span>
+                        <span class="count-badge red">3 Items Due</span>
+                    </div>
+
+                    <div class="assignment-item urgent">
+                        <div class="asgn-info">
+                            <span class="sub-tag">Machine Learning Lab (IFA2316N)</span>
+                            <strong>Lab Assignment 5: Clustering & PCA Implementation</strong>
+                            <span class="due-text"><i class="fa-solid fa-triangle-exclamation"></i> Due Today, 11:59 PM</span>
+                        </div>
+                        <button class="btn-submit-fast" onclick="window.location.href='dashboard.html'"><i class="fa-solid fa-upload"></i> Submit</button>
+                    </div>
+
+                    <div class="assignment-item warning">
+                        <div class="asgn-info">
+                            <span class="sub-tag">Java Programming (IFA2301N)</span>
+                            <strong>Unit 3 Mini-Project: Multithreaded Banking App</strong>
+                            <span class="due-text"><i class="fa-regular fa-clock"></i> Due in 2 Days (Aug 13)</span>
+                        </div>
+                        <button class="btn-submit-fast" onclick="window.location.href='dashboard.html'"><i class="fa-solid fa-upload"></i> Submit</button>
+                    </div>
+
+                    <div class="assignment-item standard">
+                        <div class="asgn-info">
+                            <span class="sub-tag">Mathematical Aptitude (IFA2303N)</span>
+                            <strong>Problem Set 4: Probability & Permutations</strong>
+                            <span class="due-text"><i class="fa-regular fa-clock"></i> Due in 5 Days (Aug 16)</span>
+                        </div>
+                        <button class="btn-submit-fast" onclick="window.location.href='dashboard.html'"><i class="fa-solid fa-upload"></i> Submit</button>
+                    </div>
+                </div>
+
+                <div class="chat-message bot">
+                    <p>💡 <em>Tip: You can use our TensorFlow Compression Gateway on the main dashboard to submit even during network drops!</em></p>
+                </div>
+            </div>
+
+            <div class="chatbox-footer">
+                <input type="text" id="chatInput" placeholder="Ask AI Assistant..." onkeypress="handleChatKey(event)">
+                <button onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- FLOATING BOT TRIGGER BUTTON -->
+        <div class="floating-bot" onclick="toggleChatbot()" title="Click for Pending Assignment Reminders">
+            <i class="fa-solid fa-robot"></i>
+            <span class="bot-badge">3</span>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+</body>
+</html>

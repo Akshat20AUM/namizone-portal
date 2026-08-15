@@ -1,0 +1,315 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', 'Roboto', sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #1d5b96 0%, #2980b9 35%, #e67e22 80%, #f39c12 100%);
+    background-attachment: fixed;
+    padding: 15px;
+}
+
+.main-card {
+    width: 100%;
+    max-width: 900px;
+    background: linear-gradient(180deg, rgba(235, 238, 242, 0.85) 0%, rgba(220, 200, 160, 0.85) 100%);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 30px 40px;
+    backdrop-filter: blur(5px);
+}
+
+.logo-container {
+    margin-bottom: 25px;
+}
+
+.namizone-logo {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #4a5568;
+    letter-spacing: 2px;
+    display: inline-block;
+}
+
+.namizone-logo .lightning {
+    color: #1e5ba8;
+    display: inline-block;
+    font-style: italic;
+    transform: skewX(-10deg);
+}
+
+.content-body {
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+}
+
+.content-body.hidden {
+    display: none !important;
+}
+
+/* Blank Banner Areas */
+.left-banner-blank, .right-banner-blank {
+    flex: 1;
+    min-height: 380px;
+    background: rgba(15, 23, 42, 0.15);
+    border-radius: 8px;
+    border: 1px dashed rgba(0, 0, 0, 0.15);
+}
+
+/* --- Student Portal Styling --- */
+.right-login-section {
+    flex: 1.1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 10px;
+}
+
+.login-header-row {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.login-title {
+    color: #48bb78;
+}
+
+.role-selector {
+    font-size: 0.95rem;
+    margin-left: 6px;
+}
+
+.role-link {
+    color: #1e40af;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.divider {
+    color: #1e40af;
+    margin: 0 2px;
+}
+
+.input-field-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.input-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.input-field-wrapper input {
+    width: 100%;
+    padding: 12px 16px 12px 42px;
+    background-color: #fefec8;
+    border: 1px solid #e2e8f0;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    outline: none;
+}
+
+.captcha-box {
+    background-color: #333333;
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 250px;
+}
+
+.captcha-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.checkmark-circle {
+    width: 22px;
+    height: 22px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #ffffff;
+}
+
+.captcha-text {
+    font-size: 0.85rem;
+}
+
+.captcha-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.cf-logo {
+    font-size: 0.65rem;
+    font-weight: bold;
+    color: #f97316;
+}
+
+.cf-subtext {
+    font-size: 0.55rem;
+    color: #94a3b8;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #48bb78;
+    color: #ffffff;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.forgot-row {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.78rem;
+    color: #64748b;
+}
+
+.forgot-row a {
+    color: #475569;
+    text-decoration: none;
+}
+
+/* --- Faculty Portal Styling --- */
+.faculty-login-box {
+    flex: 1.1;
+    background-color: #ffb700; /* Distinct Bright Yellow Background */
+    border-radius: 4px;
+    padding: 24px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.faculty-header-row {
+    margin-bottom: 18px;
+}
+
+.faculty-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #a82300; /* Deep Red Title */
+    margin-right: 8px;
+}
+
+.faculty-subtitle {
+    font-size: 0.85rem;
+    color: #660000;
+    font-weight: bold;
+}
+
+.switch-back-link {
+    color: #660000;
+    text-decoration: underline;
+}
+
+.faculty-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.faculty-field label {
+    width: 100px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #111111;
+}
+
+.faculty-field input {
+    flex: 1;
+    padding: 6px 8px;
+    border: 1px solid #cccccc;
+    background-color: #ffffff;
+    font-size: 0.9rem;
+    outline: none;
+}
+
+.captcha-text-instruction {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #a82300;
+    margin: 14px 0 6px 0;
+}
+
+.text-captcha-image {
+    background-color: #e6cca0;
+    background-image: repeating-linear-gradient(45deg, #d4b886 0, #d4b886 10px, #e6cca0 10px, #e6cca0 20px);
+    border: 1px solid #b89b68;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.8rem;
+    font-weight: bold;
+    letter-spacing: 6px;
+    color: #1e3a8a;
+    margin-bottom: 12px;
+}
+
+.get-password-row {
+    margin: 12px 0 18px 0;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #a82300;
+}
+
+.get-password-row a {
+    color: #a82300;
+    text-decoration: none;
+}
+
+.yellow-dot {
+    color: #990000;
+    font-size: 0.7rem;
+}
+
+.faculty-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 8px 24px;
+    background-color: #8b0000; /* Deep Maroon/Red Button */
+    color: #ffffff;
+    border: 1px solid #550000;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .content-body {
+        flex-direction: column;
+    }
+    .left-banner-blank, .right-banner-blank {
+        display: none;
+    }
+}

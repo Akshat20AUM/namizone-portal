@@ -63,7 +63,7 @@
         <!-- MAIN DASHBOARD CONTENT -->
         <main class="faculty-main-content">
             
-            <!-- SECTION 1: TODAY'S TIMETABLE WITH START / END CLASS CONTROLS -->
+            <!-- SECTION 1: TODAY'S TIMETABLE WITH START / END / CANCEL CLASS CONTROLS -->
             <section class="card timetable-card">
                 <div class="card-header">
                     <div>
@@ -89,6 +89,9 @@
                             <button id="btn-end-ifa2301n" class="btn-class end disabled" disabled onclick="endClass('Java Programming (IFA2301N)', 'ifa2301n')">
                                 <i class="fa-solid fa-stop"></i> End Class
                             </button>
+                            <button id="btn-cancel-ifa2301n" class="btn-class cancel" onclick="cancelClass('Java Programming (IFA2301N)', 'ifa2301n')">
+                                <i class="fa-solid fa-ban"></i> Cancel Class
+                            </button>
                             <button class="btn-class att-roster" onclick="openAttendanceModal('Java Programming (IFA2301N)')">
                                 <i class="fa-solid fa-list-check"></i> Student Roster (10)
                             </button>
@@ -109,6 +112,9 @@
                             </button>
                             <button id="btn-end-ifa2302n" class="btn-class end disabled" disabled onclick="endClass('Java Programming Lab (IFA2302N)', 'ifa2302n')">
                                 <i class="fa-solid fa-stop"></i> End Class
+                            </button>
+                            <button id="btn-cancel-ifa2302n" class="btn-class cancel" onclick="cancelClass('Java Programming Lab (IFA2302N)', 'ifa2302n')">
+                                <i class="fa-solid fa-ban"></i> Cancel Class
                             </button>
                             <button class="btn-class att-roster" onclick="openAttendanceModal('Java Programming Lab (IFA2302N)')">
                                 <i class="fa-solid fa-list-check"></i> Student Roster (10)
@@ -238,7 +244,6 @@
                 <p class="roster-hint">Mark attendance status for enrolled students (Section 321):</p>
                 
                 <div class="student-roster-list">
-                    <!-- Student 1 to 10 Roster -->
                     <div class="roster-item">
                         <div class="student-meta"><strong>XYZ Student 1</strong><span>Roll No: A71015849201 | BCA 3rd Sem</span></div>
                         <div class="toggle-group">

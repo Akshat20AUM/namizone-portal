@@ -1,8 +1,8 @@
 /* ==========================================================================
-   NAMIZONE FACULTY PORTAL — COMPLETE SCRIPT WITH DUMMY GENERATOR
+   NAMIZONE FACULTY PORTAL — COMPLETE SCRIPT WITH CLASS STATUS CONTROLS
    ========================================================================== */
 
-// Restore saved Dark Mode theme state on initial page load
+// Restore saved Dark Mode theme state and initial class statuses
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('namizone_faculty_theme');
     if (savedTheme === 'dark') {
@@ -12,7 +12,53 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.style.color = '#38bdf8';
         }
     }
+
+    // Sync button UI with current saved class states
+    syncFacultyClassUI();
 });
+
+// Helper: Extract Subject Code (e.g. "IFA2301N" from "Java Programming (IFA2301N)")
+function extractSubjectCode(subjectStr) {
+    const match = subjectStr.match(/\(([^)]+)\)/);
+    return match ? match[1].trim() : subjectStr.trim();
+}
+
+// Sync UI controls with stored state on page load
+function syncFacultyClassUI() {
+    const statuses = JSON.parse(localStorage.getItem('namizone_class_statuses') || '{}');
+    
+    Object.keys(statuses).forEach(subjectCode => {
+        const item = statuses[subjectCode];
+        const slotKey = item.slotKey;
+        if (!slotKey) return;
+
+        const startBtn = document.getElementById(`btn-start-${slotKey}`);
+        const endBtn = document.getElementById(`btn-end-${slotKey}`);
+        const cancelBtn = document.getElementById(`btn-cancel-${slotKey}`);
+        const statusText = document.getElementById(`status-${slotKey}`);
+        const slotCard = document.getElementById(`slot-${slotKey}`);
+
+        if (item.status === 'ONGOING') {
+            if (startBtn) { startBtn.disabled = true; startBtn.classList.add('disabled'); }
+            if (endBtn) { endBtn.disabled = false; endBtn.classList.remove('disabled'); }
+            if (cancelBtn) { cancelBtn.disabled = false; cancelBtn.classList.remove('disabled'); }
+            if (statusText) statusText.innerText = 'Status: 🟢 LIVE CLASS IN PROGRESS';
+            if (slotCard) slotCard.classList.add('in-session');
+        } else if (item.status === 'CANCELLED') {
+            if (startBtn) { startBtn.disabled = false; startBtn.classList.remove('disabled'); }
+            if (endBtn) { endBtn.disabled = true; endBtn.classList.add('disabled'); }
+            if (cancelBtn) { cancelBtn.disabled = true; cancelBtn.classList.add('disabled'); }
+            if (statusText) statusText.innerText = 'Status: ❌ CLASS CANCELLED';
+            if (slotCard) slotCard.classList.remove('in-session');
+        } else if (item.status === 'CONCLUDED') {
+            if (startBtn) { startBtn.disabled = false; startBtn.classList.remove('disabled'); }
+            if (endBtn) { endBtn.disabled = true; endBtn.classList.add('disabled'); }
+            if (cancelBtn) { cancelBtn.disabled = true; cancelBtn.classList.add('disabled'); }
+            if (statusText) statusText.innerText = 'Status: ✅ CLASS CONCLUDED';
+            if (slotCard) slotCard.classList.remove('in-session');
+        }
+    });
+}
 
 // Toggle Dark / Night Mode
 function toggleDarkMode() {
@@ -42,59 +88,89 @@ function logout() {
     window.location.href = 'index.html';
 }
 
-// Start Live Class Session & Broadcast Event to Active Student Portals
+// Save Class Status in persistent map & broadcast
+function updateClassStatusStore(subjectName, slotKey, status) {
+    const subjectCode = extractSubjectCode(subjectName);
+    const statuses = JSON.parse(localStorage.getItem('namizone_class_statuses') || '{}');
+
+    statuses[subjectCode] = {
+        subjectCode: subjectCode,
+        subjectName: subjectName,
+        slotKey: slotKey,
+        status: status, // 'ONGOING' | 'CANCELLED' | 'CONCLUDED' | 'SCHEDULED'
+        timestamp: Date.now()
+    };
+
+    localStorage.setItem('namizone_class_statuses', JSON.stringify(statuses));
+
+    // Broadcast trigger for student tabs
+    const payload = {
+        action: status.toLowerCase(),
+        subject: subjectName,
+        subjectCode: subjectCode,
+        status: status,
+        slotKey: slotKey,
+        teacher: 'Prof. Java Faculty',
+        timestamp: Date.now()
+    };
+    localStorage.setItem('namizone_live_class_event', JSON.stringify(payload));
+}
+
+// Start Live Class Session
 function startClass(subjectName, slotKey) {
     const startBtn = document.getElementById(`btn-start-${slotKey}`);
     const endBtn = document.getElementById(`btn-end-${slotKey}`);
+    const cancelBtn = document.getElementById(`btn-cancel-${slotKey}`);
     const statusText = document.getElementById(`status-${slotKey}`);
     const slotCard = document.getElementById(`slot-${slotKey}`);
 
-    if (startBtn && endBtn) {
-        startBtn.disabled = true;
-        startBtn.classList.add('disabled');
+    if (startBtn) { startBtn.disabled = true; startBtn.classList.add('disabled'); }
+    if (endBtn) { endBtn.disabled = false; endBtn.classList.remove('disabled'); }
+    if (cancelBtn) { cancelBtn.disabled = false; cancelBtn.classList.remove('disabled'); }
+    if (statusText) statusText.innerText = 'Status: 🟢 LIVE CLASS IN PROGRESS';
+    if (slotCard) slotCard.classList.add('in-session');
 
-        endBtn.disabled = false;
-        endBtn.classList.remove('disabled');
-
-        if (statusText) statusText.innerText = 'Status: 🟢 LIVE CLASS IN PROGRESS';
-        if (slotCard) slotCard.classList.add('in-session');
-    }
-
-    const payload = {
-        action: 'start_class',
-        subject: subjectName,
-        teacher: 'Prof. Java Faculty',
-        timestamp: Date.now()
-    };
-
-    localStorage.setItem('namizone_live_class_event', JSON.stringify(payload));
-    alert(`🟢 Class Started: "${subjectName}"!\nLive notification broadcasted to active student portals.`);
+    updateClassStatusStore(subjectName, slotKey, 'ONGOING');
+    alert(`🟢 Class Started: "${subjectName}"!\nLive ongoing badge reflected on student dashboards.`);
 }
 
-// End Live Class Session & Update System Status
+// End Live Class Session
 function endClass(subjectName, slotKey) {
     const startBtn = document.getElementById(`btn-start-${slotKey}`);
     const endBtn = document.getElementById(`btn-end-${slotKey}`);
+    const cancelBtn = document.getElementById(`btn-cancel-${slotKey}`);
     const statusText = document.getElementById(`status-${slotKey}`);
     const slotCard = document.getElementById(`slot-${slotKey}`);
 
-    if (startBtn && endBtn) {
-        endBtn.disabled = true;
-        endBtn.classList.add('disabled');
+    if (startBtn) { startBtn.disabled = false; startBtn.classList.remove('disabled'); }
+    if (endBtn) { endBtn.disabled = true; endBtn.classList.add('disabled'); }
+    if (cancelBtn) { cancelBtn.disabled = true; cancelBtn.classList.add('disabled'); }
+    if (statusText) statusText.innerText = 'Status: ✅ CLASS CONCLUDED';
+    if (slotCard) slotCard.classList.remove('in-session');
 
-        if (statusText) statusText.innerText = 'Status: ✅ CLASS CONCLUDED';
-        if (slotCard) slotCard.classList.remove('in-session');
-    }
-
-    const payload = {
-        action: 'end_class',
-        subject: subjectName,
-        teacher: 'Prof. Java Faculty',
-        timestamp: Date.now()
-    };
-
-    localStorage.setItem('namizone_live_class_event', JSON.stringify(payload));
+    updateClassStatusStore(subjectName, slotKey, 'CONCLUDED');
     alert(`🔴 Class Concluded: "${subjectName}". Status updated across portals.`);
+}
+
+// Cancel Class Session
+function cancelClass(subjectName, slotKey) {
+    const confirmed = confirm(`Are you sure you want to cancel the session for "${subjectName}"?`);
+    if (!confirmed) return;
+
+    const startBtn = document.getElementById(`btn-start-${slotKey}`);
+    const endBtn = document.getElementById(`btn-end-${slotKey}`);
+    const cancelBtn = document.getElementById(`btn-cancel-${slotKey}`);
+    const statusText = document.getElementById(`status-${slotKey}`);
+    const slotCard = document.getElementById(`slot-${slotKey}`);
+
+    if (startBtn) { startBtn.disabled = false; startBtn.classList.remove('disabled'); }
+    if (endBtn) { endBtn.disabled = true; endBtn.classList.add('disabled'); }
+    if (cancelBtn) { cancelBtn.disabled = true; cancelBtn.classList.add('disabled'); }
+    if (statusText) statusText.innerText = 'Status: ❌ CLASS CANCELLED';
+    if (slotCard) slotCard.classList.remove('in-session');
+
+    updateClassStatusStore(subjectName, slotKey, 'CANCELLED');
+    alert(`❌ Class Cancelled: "${subjectName}". Student dashboard updated.`);
 }
 
 // Open Student Attendance Roster Modal
@@ -154,7 +230,6 @@ function publishFacultyItem(event) {
    DUMMY NOTIFICATION SHOWCASE GENERATOR
    ========================================================================== */
 
-// Trigger quick pre-configured showcase dummy notifications
 function triggerQuickDummy(presetType) {
     let payload = {};
 
@@ -176,7 +251,7 @@ function triggerQuickDummy(presetType) {
         };
     } else if (presetType === 'class') {
         payload = {
-            type: 'quiz', // Rendered as highlighted alert
+            type: 'quiz',
             subject: 'Java Programming Lab (IFA2302N)',
             title: 'Class Starting in 5 Minutes! Join Lab 105 or online gateway.',
             author: 'Prof. Java Faculty',
@@ -188,7 +263,6 @@ function triggerQuickDummy(presetType) {
     alert(`⚡ Showcase Notification Broadcasted!\nCheck the open Student Dashboard tab to view the live toast notification.`);
 }
 
-// Send custom notification message from input fields
 function sendCustomDummyNotification() {
     const author = document.getElementById('dummyAuthor').value.trim() || "Prof. Java Faculty";
     const subject = document.getElementById('dummySubject').value.trim() || "Java Programming";

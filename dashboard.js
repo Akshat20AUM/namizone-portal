@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NAMIZONE STUDENT DASHBOARD — COMPLETE SCRIPT WITH DYNAMIC AI GUARDIAN
+   NAMIZONE STUDENT DASHBOARD — COMPLETE SCRIPT WITH DYNAMIC CLASS STATUS
    ========================================================================== */
 
 let tfModel = null;
@@ -23,11 +23,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (icon) icon.style.color = '#38bdf8';
     }
 
-    // 3. Initialize dynamic AI Guardian telemetry diagnostic loop (runs every 3 seconds)
+    // 3. Restore and render any active Class Statuses (Ongoing / Cancelled)
+    renderAllSavedClassStatuses();
+
+    // 4. Initialize dynamic AI Guardian telemetry diagnostic loop (runs every 3 seconds)
     measureRealtimeTelemetry();
     telemetryInterval = setInterval(measureRealtimeTelemetry, 3000);
 
-    // 4. Train in-browser TensorFlow.js Model
+    // 5. Train in-browser TensorFlow.js Model
     await initTensorFlowModel();
 });
 
@@ -37,7 +40,89 @@ function logout() {
 }
 
 /* ==========================================================================
-   1. DYNAMIC AI GUARDIAN TELEMETRY ENGINE (LIVE JITTER & STATUS UPDATES)
+   1. REAL-TIME CLASS STATUS RENDERER (ONGOING / CANCELLED / CONCLUDED)
+   ========================================================================== */
+
+// Helper to extract Subject Code from strings like "Java Programming (IFA2301N)"
+function extractSubjectCode(subjectStr) {
+    if (!subjectStr) return '';
+    const match = subjectStr.match(/\(([^)]+)\)/);
+    return match ? match[1].trim() : subjectStr.trim();
+}
+
+// Render all active statuses persisted in localStorage
+function renderAllSavedClassStatuses() {
+    try {
+        const statuses = JSON.parse(localStorage.getItem('namizone_class_statuses') || '{}');
+        Object.keys(statuses).forEach(subjectCode => {
+            const item = statuses[subjectCode];
+            applyClassStatusUI(item.subjectCode || subjectCode, item.status);
+        });
+    } catch (e) {
+        console.error("Error reading saved class statuses:", e);
+    }
+}
+
+// Apply the badge & dot changes to the matching class row
+function applyClassStatusUI(subjectCode, status) {
+    if (!subjectCode) return;
+    
+    // Normalize code for matching
+    const cleanCode = subjectCode.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    
+    // Find row by data-subject-code or fallback by row inner text
+    const rows = document.querySelectorAll('.classes-list .class-row');
+    let targetRow = null;
+
+    rows.forEach(row => {
+        const rowCode = (row.getAttribute('data-subject-code') || '').toUpperCase();
+        if (rowCode && rowCode === cleanCode) {
+            targetRow = row;
+        } else if (!targetRow && row.innerText.toUpperCase().includes(cleanCode)) {
+            targetRow = row;
+        }
+    });
+
+    if (!targetRow) return;
+
+    let badgePill = targetRow.querySelector('.class-status-pill');
+    if (!badgePill) {
+        badgePill = document.createElement('div');
+        badgePill.className = 'class-status-pill';
+        targetRow.appendChild(badgePill);
+    }
+
+    const dot = targetRow.querySelector('.status-dot');
+
+    if (status === 'ONGOING') {
+        badgePill.innerHTML = `<span class="badge-pill ongoing"><i class="fa-solid fa-circle-play"></i> Class Ongoing</span>`;
+        if (dot) {
+            dot.style.color = '#16a34a';
+            dot.classList.add('pulse');
+        }
+        targetRow.classList.add('row-ongoing');
+        targetRow.classList.remove('row-cancelled');
+    } else if (status === 'CANCELLED') {
+        badgePill.innerHTML = `<span class="badge-pill cancelled"><i class="fa-solid fa-ban"></i> Class Cancelled</span>`;
+        if (dot) {
+            dot.style.color = '#ef4444';
+            dot.classList.remove('pulse');
+        }
+        targetRow.classList.add('row-cancelled');
+        targetRow.classList.remove('row-ongoing');
+    } else {
+        // CONCLUDED or SCHEDULED: Clear badge
+        badgePill.innerHTML = '';
+        if (dot) {
+            dot.style.color = '#94a3b8';
+            dot.classList.remove('pulse');
+        }
+        targetRow.classList.remove('row-ongoing', 'row-cancelled');
+    }
+}
+
+/* ==========================================================================
+   2. DYNAMIC AI GUARDIAN TELEMETRY ENGINE
    ========================================================================== */
 
 async function measureRealtimeTelemetry() {
@@ -54,11 +139,8 @@ async function measureRealtimeTelemetry() {
         await fetch('https://www.cloudflare.com/cdn-cgi/trace', { method: 'HEAD', mode: 'no-cors', cache: 'no-store' });
         const endTime = performance.now();
         
-        // Add subtle random jitter (+/- 8ms) to simulate real network traffic variations
         const rawPing = Math.round(endTime - startTime);
         currentMeasuredPing = Math.max(12, rawPing + (Math.floor(Math.random() * 16) - 8));
-
-        // Simulate dynamic RSSI fluctuations (-48 dBm to -68 dBm)
         const simulatedRssi = -52 - Math.floor(Math.random() * 14);
 
         if (pingEl) pingEl.innerText = `${currentMeasuredPing} ms`;
@@ -93,7 +175,7 @@ async function measureRealtimeTelemetry() {
 }
 
 /* ==========================================================================
-   2. DARK MODE TOGGLE (GEAR ICON)
+   3. DARK MODE TOGGLE
    ========================================================================== */
 
 function toggleDarkMode() {
@@ -118,14 +200,12 @@ function toggleDarkMode() {
 }
 
 /* ==========================================================================
-   3. BELL NOTIFICATION DRAWER & REAL-TIME FACULTY CROSS-TAB SYNC
+   4. BELL NOTIFICATION DRAWER & REAL-TIME CROSS-TAB SYNC
    ========================================================================== */
 
 function toggleNotificationPanel() {
     const panel = document.getElementById('notificationPanel');
-    if (panel) {
-        panel.classList.toggle('hidden');
-    }
+    if (panel) panel.classList.toggle('hidden');
 }
 
 function clearNotificationBadge() {
@@ -159,9 +239,9 @@ function addNotificationToPanel(title, description, type = 'assignment') {
     if (type === 'quiz') {
         iconClass = 'quiz';
         iconFa = 'fa-pen-ruler';
-    } else if (type === 'class_start' || type === 'class_end') {
-        iconClass = 'class-start';
-        iconFa = 'fa-chalkboard-user';
+    } else if (type === 'class_start' || type === 'class_end' || type === 'class_cancel') {
+        iconClass = type === 'class_cancel' ? 'quiz' : 'class-start';
+        iconFa = type === 'class_cancel' ? 'fa-ban' : 'fa-chalkboard-user';
     }
 
     const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -179,9 +259,9 @@ function addNotificationToPanel(title, description, type = 'assignment') {
     incrementBellBadge();
 }
 
-/* LISTEN FOR REAL-TIME EVENTS FROM FACULTY PORTAL */
+/* STORAGE LISTENER: CATCH BROADCASTS FROM FACULTY TAB */
 window.addEventListener('storage', (event) => {
-    // A. New Assignment or Pop Quiz Broadcast
+    // A. Assignment or Quiz Broadcast
     if (event.key === 'namizone_faculty_broadcast' && event.newValue) {
         try {
             const data = JSON.parse(event.newValue);
@@ -193,18 +273,24 @@ window.addEventListener('storage', (event) => {
         }
     }
 
-    // B. Live Class Sessions (Start / End Class)
+    // B. Live Class State Sync (Start / Cancel / End)
     if (event.key === 'namizone_live_class_event' && event.newValue) {
         try {
             const data = JSON.parse(event.newValue);
-            if (data.action === 'start_class') {
-                showLiveClassToast(data.subject, data.teacher, 'STARTED');
-                updateStudentClassRowStatus(data.subject, true);
-                addNotificationToPanel(`${data.teacher}`, `CLASS STARTED: ${data.subject}`, 'class_start');
-            } else if (data.action === 'end_class') {
-                showLiveClassToast(data.subject, data.teacher, 'CONCLUDED');
-                updateStudentClassRowStatus(data.subject, false);
-                addNotificationToPanel(`${data.teacher}`, `CLASS CONCLUDED: ${data.subject}`, 'class_end');
+            const code = data.subjectCode || extractSubjectCode(data.subject);
+
+            if (data.status === 'ONGOING' || data.action === 'start_class' || data.action === 'ongoing') {
+                showLiveClassToast(data.subject, data.teacher, 'STARTED', 'ongoing');
+                applyClassStatusUI(code, 'ONGOING');
+                addNotificationToPanel(`${data.teacher}`, `🟢 CLASS STARTED: ${data.subject}`, 'class_start');
+            } else if (data.status === 'CANCELLED' || data.action === 'cancel_class' || data.action === 'cancelled') {
+                showLiveClassToast(data.subject, data.teacher, 'CANCELLED', 'cancelled');
+                applyClassStatusUI(code, 'CANCELLED');
+                addNotificationToPanel(`${data.teacher}`, `❌ CLASS CANCELLED: ${data.subject}`, 'class_cancel');
+            } else if (data.status === 'CONCLUDED' || data.action === 'end_class' || data.action === 'concluded') {
+                showLiveClassToast(data.subject, data.teacher, 'CONCLUDED', 'concluded');
+                applyClassStatusUI(code, 'CONCLUDED');
+                addNotificationToPanel(`${data.teacher}`, `✅ CLASS CONCLUDED: ${data.subject}`, 'class_end');
             }
         } catch (e) {
             console.error("Live class broadcast error:", e);
@@ -244,24 +330,28 @@ function showFacultyNotification(type, subject, title, author = "Prof. XYZ") {
     }, 8000);
 }
 
-function showLiveClassToast(subject, teacher, status) {
+function showLiveClassToast(subject, teacher, actionLabel, statusType = 'ongoing') {
     const container = document.getElementById('notificationContainer');
     if (!container) return;
 
     const toast = document.createElement('div');
-    toast.className = 'notification-toast quiz';
+    toast.className = `notification-toast ${statusType === 'cancelled' ? 'assignment' : 'quiz'}`;
 
     const nowTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const iconClass = statusType === 'cancelled' ? 'fa-ban' : 'fa-chalkboard-user';
+    const msg = statusType === 'cancelled' 
+        ? `${subject} has been cancelled by faculty.` 
+        : `${subject} is now live in session.`;
 
     toast.innerHTML = `
-        <i class="fa-solid fa-chalkboard-user toast-icon"></i>
+        <i class="fa-solid ${iconClass} toast-icon"></i>
         <div class="toast-content">
             <div class="toast-header">
                 <span class="toast-author">${teacher}</span>
                 <span class="toast-time">${nowTime}</span>
             </div>
-            <div class="toast-title">CLASS ${status}!</div>
-            <div class="toast-sub">${subject} is now live in session.</div>
+            <div class="toast-title">CLASS ${actionLabel}!</div>
+            <div class="toast-sub">${msg}</div>
         </div>
         <button class="toast-close-btn" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>
     `;
@@ -273,18 +363,6 @@ function showLiveClassToast(subject, teacher, status) {
         toast.style.transform = 'translateX(100%)';
         setTimeout(() => toast.remove(), 300);
     }, 8000);
-}
-
-function updateStudentClassRowStatus(subjectName, isLive) {
-    const rows = document.querySelectorAll('.classes-list .class-row');
-    rows.forEach(row => {
-        if (row.innerText.includes(subjectName.split(' ')[0])) {
-            const dot = row.querySelector('.status-dot');
-            if (dot) {
-                dot.style.color = isLive ? '#16a34a' : '#94a3b8';
-            }
-        }
-    });
 }
 
 function appendItemToPendingBot(data) {
@@ -306,7 +384,7 @@ function appendItemToPendingBot(data) {
 }
 
 /* ==========================================================================
-   4. TENSORFLOW.JS QOS COMPRESSION ENGINE
+   5. TENSORFLOW.JS QOS COMPRESSION ENGINE
    ========================================================================== */
 
 async function initTensorFlowModel() {
@@ -415,7 +493,7 @@ async function executeCompression(qualityRatio) {
 }
 
 /* ==========================================================================
-   5. CHATBOT INTERACTION & DRAFT RESTORATION UTILITIES
+   6. CHATBOT INTERACTION & DRAFT RESTORATION UTILITIES
    ========================================================================== */
 
 function toggleChatbot() {

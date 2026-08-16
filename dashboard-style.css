@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NAMIZONE DASHBOARD — COMPLETE RESTORED STYLESHEET
+   NAMIZONE DASHBOARD — COMPLETE RESTORED STYLESHEET WITH LIVE CLASS BADGES
    ========================================================================== */
 
 * {
@@ -545,14 +545,28 @@ body {
     margin-bottom: 4px;
 }
 
+/* CLASS ROWS & REAL-TIME STATUS PILLS */
 .class-row {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 8px;
+    padding: 8px 12px;
     background: #F8FAFC;
     border: 1px solid #E2E8F0;
     border-radius: 4px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.class-row.row-ongoing {
+    border-left: 4px solid #16A34A;
+    background: #F0FDF4;
+}
+
+.class-row.row-cancelled {
+    border-left: 4px solid #EF4444;
+    background: #FEF2F2;
+    opacity: 0.9;
 }
 
 .time-col {
@@ -560,20 +574,74 @@ body {
     font-size: 0.72rem;
     width: 85px;
     color: #475569;
+    flex-shrink: 0;
 }
 
-.status-dot { font-size: 0.8rem; transition: color 0.3s; }
+.status-dot { 
+    font-size: 0.8rem; 
+    transition: color 0.3s; 
+    flex-shrink: 0;
+}
+
 .status-dot.green { color: #16A34A; }
 .status-dot.blue { color: #0284C7; }
 .status-dot.gray { color: #94A3B8; }
 
+.status-dot.pulse {
+    animation: pulseDot 1.5s infinite;
+}
+
+@keyframes pulseDot {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
 .class-info {
     display: flex;
     flex-direction: column;
+    flex: 1;
 }
 
 .class-info strong { font-size: 0.78rem; color: #0F172A; }
 .class-info span { font-size: 0.68rem; color: #64748B; }
+
+.class-status-pill {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.badge-pill {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.badge-pill.ongoing {
+    background-color: #DCFCE7;
+    color: #15803D;
+    border: 1px solid #86EFAC;
+    animation: pulseOngoing 1.8s infinite;
+}
+
+.badge-pill.cancelled {
+    background-color: #FEE2E2;
+    color: #B91C1C;
+    border: 1px solid #FCA5A5;
+}
+
+@keyframes pulseOngoing {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.85; transform: scale(1.02); }
+}
 
 /* 3. MY ATTENDANCE — CIRCULAR OUTLINE BADGES */
 .attendance-list {
@@ -1064,6 +1132,28 @@ body.dark-mode .panel-item,
 body.dark-mode .panel-body {
     background-color: #0F172A;
     border-color: #334155;
+}
+
+body.dark-mode .class-row.row-ongoing {
+    background: rgba(22, 163, 74, 0.15);
+    border-color: #16A34A;
+}
+
+body.dark-mode .class-row.row-cancelled {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #EF4444;
+}
+
+body.dark-mode .badge-pill.ongoing {
+    background-color: rgba(22, 163, 74, 0.25);
+    color: #4ADE80;
+    border-color: #22C55E;
+}
+
+body.dark-mode .badge-pill.cancelled {
+    background-color: rgba(239, 68, 68, 0.25);
+    color: #F87171;
+    border-color: #EF4444;
 }
 
 body.dark-mode .breadcrumb,

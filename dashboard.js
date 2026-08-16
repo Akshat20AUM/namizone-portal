@@ -1,7 +1,14 @@
 /* ==========================================================================
    NAMIZONE STUDENT DASHBOARD — COMPLETE SCRIPT WITH DYNAMIC CLASS STATUS
    ========================================================================== */
-
+// Reset class states on a fresh project startup
+(function checkFreshSession() {
+    if (!sessionStorage.getItem('namizone_session_active')) {
+        localStorage.removeItem('namizone_class_statuses');
+        localStorage.removeItem('namizone_live_class_event');
+        sessionStorage.setItem('namizone_session_active', 'true');
+    }
+})();
 let tfModel = null;
 let originalFile = null;
 let originalImageObject = new Image();

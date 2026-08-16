@@ -1,7 +1,14 @@
 /* ==========================================================================
    NAMIZONE FACULTY PORTAL — COMPLETE SCRIPT WITH CLASS STATUS CONTROLS
    ========================================================================== */
-
+// Reset class states on a fresh project startup
+(function checkFreshSession() {
+    if (!sessionStorage.getItem('namizone_session_active')) {
+        localStorage.removeItem('namizone_class_statuses');
+        localStorage.removeItem('namizone_live_class_event');
+        sessionStorage.setItem('namizone_session_active', 'true');
+    }
+})();
 // Restore saved Dark Mode theme state and initial class statuses
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('namizone_faculty_theme');

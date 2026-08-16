@@ -1,4 +1,4 @@
-# ⚡ NAMIZONE — Intelligent Academic & Learning Management Portal
+# ⚡ NAMIZONE  —  Intelligent Academic & Learning Management Portal
 
 A modern, responsive University Academic & Assignment Management Ecosystem designed to resolve connectivity drops, streamline faculty-student communication, and provide client-side intelligence.
 
